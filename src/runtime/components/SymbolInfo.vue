@@ -9,32 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { symbolInfoOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'symbol-info',
-  },
-});
+type SymbolInfoOptions = typeof symbolInfoOptions
 
-const defaultOptions = {
-  width: '100%',
-  colorTheme: 'dark',
-  symbol: 'NASDAQ:AAPL',
-  locale: 'en',
-  isTransparent: false,
+const props = withDefaults(defineProps<{
+  options?: Partial<SymbolInfoOptions>
+  class?: string
+}>(), {
+  class: 'symbol-info',
+  options: () => ({})
+})
+
+const mergedOptions: SymbolInfoOptions = {
+  ...symbolInfoOptions,
+  ...props.options,
 }
 
-const options = merge({}, defaultOptions, props.options);
-
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js'
 );

@@ -9,36 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { miniChartOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'mini-chart',
-  },
-});
+type MiniChartOptions = typeof miniChartOptions
 
-const defaultOptions = {
-  width: '100%',
-  height: 200,
-  colorTheme: 'dark',
-  symbol: 'FX:EURUSD',
-  locale: 'en',
-  dateRange: '12M',
-  isTransparent: false,
-  autosize: false,
-  largeChartUrl: '',
+const props = withDefaults(defineProps<{
+  options?: Partial<MiniChartOptions>
+  class?: string
+}>(), {
+  class: 'mini-chart',
+  options: () => ({})
+})
+
+const mergedOptions: MiniChartOptions = {
+  ...miniChartOptions,
+  ...props.options,
 }
 
-const options = merge({}, defaultOptions, props.options);
-
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js'
 );

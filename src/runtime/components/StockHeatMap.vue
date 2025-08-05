@@ -9,41 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { stockHeatMapOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'stock-heat-map',
-  },
-});
+type StockHeatMap = typeof stockHeatMapOptions
 
-const defaultOptions = {
-  width: '100%',
-  height: 450,
-  colorTheme: 'dark',
-  exchanges: [],
-  dataSource: 'SPX500',
-  grouping: 'no_group',
-  blockSize: 'market_cap_basic',
-  blockColor: 'Perf.YTD',
-  locale: 'en',
-  symbolUrl: '',
-  hasTopBar: false,
-  isDataSetEnabled: false,
-  isZoomEnabled: true,
-  hasSymbolTooltip: true,
+const props = withDefaults(defineProps<{
+  options?: Partial<StockHeatMap>
+  class?: string
+}>(), {
+  class: 'stock-heat-map',
+  options: () => ({})
+})
+
+const mergedOptions: StockHeatMap = {
+  ...stockHeatMapOptions,
+  ...props.options,
 }
 
-const options = merge({}, defaultOptions, props.options);
-
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js'
 );

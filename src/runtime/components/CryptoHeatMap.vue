@@ -9,39 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { cryptoHeatMapOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'crypto-heat-map',
-  },
-});
+type CryptoHeatMapOptions = typeof cryptoHeatMapOptions
 
-const defaultOptions = {
-  dataSource: 'Crypto',
-  width: '100%',
-  height: 450,
-  colorTheme: 'dark',
-  blockSize: 'market_cap_calc',
-  blockColor: 'change',
-  locale: 'en',
-  symbolUrl: '',
-  hasTopBar: false,
-  isDataSetEnabled: false,
-  isZoomEnabled: true,
-  hasSymbolTooltip: true,
-};
+const props = withDefaults(defineProps<{
+  options?: Partial<CryptoHeatMapOptions>
+  class?: string
+}>(), {
+  class: 'crypto-heat-map',
+  options: () => ({})
+})
 
-const options = merge({}, defaultOptions, props.options);
+const mergedOptions: CryptoHeatMapOptions = {
+  ...cryptoHeatMapOptions,
+  ...props.options,
+}
 
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-crypto-coins-heatmap.js'
 );

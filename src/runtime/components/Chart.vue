@@ -9,39 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { chartOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'chart',
-  },
-});
+type ChartOptions = typeof chartOptions
 
-const defaultOptions = {
-  width: '100%',
-  height: '400',
-  symbol: 'NASDAQ:AAPL',
-  interval: 'D',
-  timezone: 'Etc/UTC',
-  theme: 'dark',
-  style: '1',
-  backgroundColor: '#0C0C0D',
-  locale: 'en',
-  enable_publishing: false,
-  allow_symbol_change: true,
-  calendar: false,
-};
+const props = withDefaults(defineProps<{
+  options?: Partial<ChartOptions>
+  class?: string
+}>(), {
+  class: 'chart',
+  options: () => ({})
+})
 
-const options = merge({}, defaultOptions, props.options);
+const mergedOptions: ChartOptions = {
+  ...chartOptions,
+  ...props.options,
+}
 
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js'
 );

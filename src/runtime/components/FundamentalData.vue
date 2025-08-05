@@ -9,35 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { fundamentalDataOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'fundamental-data',
-  },
-});
+type FundamentalData = typeof fundamentalDataOptions
 
-const defaultOptions = {
-  width: '100%',
-  height: 450,
-  colorTheme: 'dark',
-  isTransparent: false,
-  largeChartUrl: '',
-  displayMode: 'regular',
-  symbol: 'NASDAQ:AAPL',
-  locale: 'en',
+const props = withDefaults(defineProps<{
+  options?: Partial<FundamentalData>
+  class?: string
+}>(), {
+  class: 'fundamental-data',
+  options: () => ({})
+})
+
+const mergedOptions: FundamentalData = {
+  ...fundamentalDataOptions,
+  ...props.options,
 }
 
-const options = merge({}, defaultOptions, props.options);
-
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-financials.js'
 );

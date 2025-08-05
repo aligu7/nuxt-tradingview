@@ -9,35 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { screenerOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'screener',
-  },
-});
+type ScreenerOptions = typeof screenerOptions
 
-const defaultOptions = {
-  width: '100%',
-  height: 450,
-  colorTheme: 'dark',
-  defaultColumn: 'overview',
-  defaultScreen: 'general',
-  market: 'forex',
-  showToolbar: true,
-  locale: 'en',
+const props = withDefaults(defineProps<{
+  options?: Partial<ScreenerOptions>
+  class?: string
+}>(), {
+  class: 'screener',
+  options: () => ({})
+})
+
+const mergedOptions: ScreenerOptions = {
+  ...screenerOptions,
+  ...props.options,
 }
 
-const options = merge({}, defaultOptions, props.options);
-
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-screener.js'
 );

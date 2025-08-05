@@ -9,34 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { cryptoMarketOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'crypto-market',
-  },
-});
+type CryptoMarketOptions = typeof cryptoMarketOptions
 
-const defaultOptions = {
-  width: '100%',
-  height: 450,
-  colorTheme: 'dark',
-  defaultColumn: 'overview',
-  screener_type: 'crypto_mkt',
-  displayCurrency: 'USD',
-  locale: 'en',
+const props = withDefaults(defineProps<{
+  options?: Partial<CryptoMarketOptions>
+  class?: string
+}>(), {
+  class: 'crypto-market',
+  options: () => ({})
+})
+
+const mergedOptions: CryptoMarketOptions = {
+  ...cryptoMarketOptions,
+  ...props.options,
 }
 
-const options = merge({}, defaultOptions, props.options);
-
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-screener.js'
 );

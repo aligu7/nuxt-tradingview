@@ -9,33 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { forexHeatMapOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'forex-heat-map',
-  },
-});
+type ForexHeatMapOptions = typeof forexHeatMapOptions
 
-const defaultOptions = {
-  width: '100%',
-  height: 450,
-  colorTheme: 'dark',
-  currencies: ['EUR', 'USD', 'JPY', 'GBP', 'CHF', 'AUD', 'CAD', 'NZD', 'CNY'],
-  isTransparent: false,
-  locale: 'en',
+const props = withDefaults(defineProps<{
+  options?: Partial<ForexHeatMapOptions>
+  class?: string
+}>(), {
+  class: 'forex-heat-map',
+  options: () => ({})
+})
+
+const mergedOptions: ForexHeatMapOptions = {
+  ...forexHeatMapOptions,
+  ...props.options,
 }
 
-const options = merge({}, defaultOptions, props.options);
-
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-forex-heat-map.js'
 );

@@ -9,33 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { companyProfileOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'company-profile',
-  },
-});
+type CompanyProfileOptions = typeof companyProfileOptions
 
-const defaultOptions = {
-  width: '100%',
-  height: 450,
-  isTransparent: false,
-  colorTheme: 'dark',
-  symbol: 'NASDAQ:AAPL',
-  locale: 'en',
+const props = withDefaults(defineProps<{
+  options?: Partial<CompanyProfileOptions>
+  class?: string
+}>(), {
+  class: 'company-profile',
+  options: () => ({})
+})
+
+const mergedOptions: CompanyProfileOptions = {
+  ...companyProfileOptions,
+  ...props.options,
 }
 
-const options = merge({}, defaultOptions, props.options);
-
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js'
 );

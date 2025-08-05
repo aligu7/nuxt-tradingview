@@ -9,33 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { forexCrossRatesOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'forex-cross-rates',
-  },
-});
+type ForexCrossRatesOptions = typeof forexCrossRatesOptions
 
-const defaultOptions = {
-  width: '100%',
-  height: 450,
-  colorTheme: 'dark',
-  currencies: ['EUR', 'USD', 'JPY', 'GBP', 'CHF', 'AUD', 'CAD', 'NZD'],
-  isTransparent: false,
-  locale: 'en',
+const props = withDefaults(defineProps<{
+  options?: Partial<ForexCrossRatesOptions>
+  class?: string
+}>(), {
+  class: 'forex-cross-rates',
+  options: () => ({})
+})
+
+const mergedOptions: ForexCrossRatesOptions = {
+  ...forexCrossRatesOptions,
+  ...props.options,
 }
 
-const options = merge({}, defaultOptions, props.options);
-
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-forex-cross-rates.js'
 );

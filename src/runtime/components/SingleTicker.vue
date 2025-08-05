@@ -9,32 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { singleTickerOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'single-ticker',
-  },
-});
+type SingleTickerOptions = typeof singleTickerOptions
 
-const defaultOptions = {
-  colorTheme: 'dark',
-  symbol: 'FX:EURUSD',
-  width: 350,
-  isTransparent: false,
-  locale: 'en',
+const props = withDefaults(defineProps<{
+  options?: Partial<SingleTickerOptions>
+  class?: string
+}>(), {
+  class: 'single-ticker',
+  options: () => ({})
+})
+
+const mergedOptions: SingleTickerOptions = {
+  ...singleTickerOptions,
+  ...props.options,
 }
 
-const options = merge({}, defaultOptions, props.options);
-
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js'
 );

@@ -9,54 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { tickerTapeOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'ticker-tape',
-  },
-});
+type TickerTapeOptions = typeof tickerTapeOptions
 
-const defaultOptions = {
-  colorTheme: 'dark',
-  showSymbolLogo: true,
-  isTransparent: false,
-  displayMode: 'adaptive',
-  locale: 'en',
-  symbols: [
-    {
-      proName: 'FOREXCOM:SPXUSD',
-      title: 'S&P 500 Index',
-    },
-    {
-      proName: 'FOREXCOM:NSXUSD',
-      title: 'US 100 Cash CFD',
-    },
-    {
-      proName: 'FX_IDC:EURUSD',
-      title: 'EUR to USD',
-    },
-    {
-      proName: 'BITSTAMP:BTCUSD',
-      title: 'Bitcoin',
-    },
-    {
-      proName: 'BITSTAMP:ETHUSD',
-      title: 'Ethereum',
-    },
-  ],
+const props = withDefaults(defineProps<{
+  options?: Partial<TickerTapeOptions>
+  class?: string
+}>(), {
+  class: 'ticker',
+  options: () => ({})
+})
+
+const mergedOptions: TickerTapeOptions = {
+  ...tickerTapeOptions,
+  ...props.options,
 }
 
-const options = merge({}, defaultOptions, props.options);
-
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js'
 );

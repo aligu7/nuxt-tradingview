@@ -9,36 +9,26 @@
 </template>
 
 <script lang="ts" setup>
+import { technicalAnalysisOptions } from '../composables/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
-import merge from 'lodash.merge'
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {},
-  },
-  class: {
-    type: String,
-    default: 'technical-analysis',
-  },
-});
+type TechnicalAnalysisOptions = typeof technicalAnalysisOptions
 
-const defaultOptions = {
-  width: '100%',
-  height: 450,
-  colorTheme: 'dark',
-  interval: '1m',
-  isTransparent: false,
-  symbol: 'NASDAQ:AAPL',
-  showIntervalTabs: true,
-  displayMode: 'single',
-  locale: 'en',
+const props = withDefaults(defineProps<{
+  options?: Partial<TechnicalAnalysisOptions>
+  class?: string
+}>(), {
+  class: 'technical-analysis',
+  options: () => ({})
+})
+
+const mergedOptions: TechnicalAnalysisOptions = {
+  ...technicalAnalysisOptions,
+  ...props.options,
 }
 
-const options = merge({}, defaultOptions, props.options);
-
 const { container, tradingview } = useInitWidget(
-  options,
+  mergedOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js'
 );
