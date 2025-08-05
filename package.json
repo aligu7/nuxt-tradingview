@@ -54,7 +54,8 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.10.3"
+    "@nuxt/kit": "^3.10.3",
+    "lodash.merge": "^4.6.2"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
@@ -62,6 +63,7 @@
     "@nuxt/module-builder": "^0.5.5",
     "@nuxt/schema": "^3.10.3",
     "@nuxt/test-utils": "^3.11.0",
+    "@types/lodash.merge": "^4.6.9",
     "@types/node": "^20.11.22",
     "changelogen": "^0.5.5",
     "eslint": "^8.57.0",

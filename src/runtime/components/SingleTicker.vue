@@ -10,6 +10,7 @@
 
 <script lang="ts" setup>
 import useInitWidget from '../composables/useInitWidget';
+import merge from 'lodash.merge'
 
 const props = defineProps({
   options: {
@@ -22,13 +23,15 @@ const props = defineProps({
   },
 });
 
-const options = props.options || {
+const defaultOptions = {
   colorTheme: 'dark',
   symbol: 'FX:EURUSD',
   width: 350,
   isTransparent: false,
   locale: 'en',
-};
+}
+
+const options = merge({}, defaultOptions, props.options);
 
 const { container, tradingview } = useInitWidget(
   options,
