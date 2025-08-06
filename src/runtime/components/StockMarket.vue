@@ -3,32 +3,30 @@
     :id="container"
     ref="tradingview"
     :style="{
-      width: options.autosize && '100%',
-      height: options.autosize && '100%',
+      width: options?.autosize ? '100%' : '',
+      height: options?.autosize ? '100%' : '',
     }" />
 </template>
 
 <script lang="ts" setup>
-import { stockMarketOptions } from '../composables/defaultWidgetOptions';
+import { stockMarketOptions } from '../data/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
 
-type StockMarketOptions = typeof stockMarketOptions
+type StockMarketOptions = typeof stockMarketOptions & {
+  [key: string]: unknown;
+};
 
 const props = withDefaults(defineProps<{
-  options?: Partial<StockMarketOptions> & { [key: string]: unknown }
+  options?: Partial<StockMarketOptions>
   class?: string
 }>(), {
   class: 'stock-market',
-  options: () => ({})
+  options: undefined
 })
 
-const mergedOptions: StockMarketOptions = {
-  ...stockMarketOptions,
-  ...props.options,
-}
-
 const { container, tradingview } = useInitWidget(
-  mergedOptions,
+  stockMarketOptions as StockMarketOptions,
+  props.options as StockMarketOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js'
 );

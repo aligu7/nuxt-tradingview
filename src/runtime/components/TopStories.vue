@@ -3,32 +3,30 @@
     :id="container"
     ref="tradingview"
     :style="{
-      width: options.autosize && '100%',
-      height: options.autosize && '100%',
+      width: options?.autosize ? '100%' : '',
+      height: options?.autosize ? '100%' : '',
     }" />
 </template>
 
 <script lang="ts" setup>
-import { topStoriesOptions } from '../composables/defaultWidgetOptions';
+import { topStoriesOptions } from '../data/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
 
-type TopStoriesOptions = typeof topStoriesOptions
+type TopStoriesOptions = typeof topStoriesOptions & {
+  [key: string]: unknown;
+};
 
 const props = withDefaults(defineProps<{
-  options?: Partial<TopStoriesOptions> & { [key: string]: unknown }
+  options?: Partial<TopStoriesOptions>
   class?: string
 }>(), {
-  class: 'ticker',
-  options: () => ({})
+  class: 'top-stories',
+  options: undefined
 })
 
-const mergedOptions: TopStoriesOptions = {
-  ...topStoriesOptions,
-  ...props.options,
-}
-
 const { container, tradingview } = useInitWidget(
-  mergedOptions,
+  topStoriesOptions as TopStoriesOptions,
+  props.options as TopStoriesOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-timeline.js'
 );

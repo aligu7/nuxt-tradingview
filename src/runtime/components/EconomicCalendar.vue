@@ -3,32 +3,30 @@
     :id="container"
     ref="tradingview"
     :style="{
-      width: options.autosize && '100%',
-      height: options.autosize && '100%',
+      width: options?.autosize ? '100%' : '',
+      height: options?.autosize ? '100%' : '',
     }" />
 </template>
 
 <script lang="ts" setup>
-import { economicCalendarOptions } from '../composables/defaultWidgetOptions';
+import { economicCalendarOptions } from '../data/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
 
-type EconomicCalendarOptions = typeof economicCalendarOptions
+type EconomicCalendarOptions = typeof economicCalendarOptions & {
+  [key: string]: unknown;
+};
 
 const props = withDefaults(defineProps<{
-  options?: Partial<EconomicCalendarOptions> & { [key: string]: unknown }
+  options?: Partial<EconomicCalendarOptions>
   class?: string
 }>(), {
   class: 'economic-calendar',
-  options: () => ({})
+  options: undefined
 })
 
-const mergedOptions: EconomicCalendarOptions = {
-  ...economicCalendarOptions,
-  ...props.options,
-}
-
 const { container, tradingview } = useInitWidget(
-  mergedOptions,
+  economicCalendarOptions as EconomicCalendarOptions,
+  props.options as EconomicCalendarOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-events.js'
 );

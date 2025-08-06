@@ -3,32 +3,30 @@
     :id="container"
     ref="tradingview"
     :style="{
-      width: options.autosize && '100%',
-      height: options.autosize && '100%',
+      width: options?.autosize ? '100%' : '',
+      height: options?.autosize ? '100%' : '',
     }" />
 </template>
 
 <script lang="ts" setup>
-import { marketDataOptions } from '../composables/defaultWidgetOptions';
+import { marketDataOptions } from '../data/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
 
-type MarketDataOptions = typeof marketDataOptions
+type MarketDataOptions = typeof marketDataOptions & {
+  [key: string]: unknown;
+};
 
 const props = withDefaults(defineProps<{
-  options?: Partial<MarketDataOptions> & { [key: string]: unknown }
+  options?: Partial<MarketDataOptions>
   class?: string
 }>(), {
   class: 'market-data',
-  options: () => ({})
+  options: undefined
 })
 
-const mergedOptions: MarketDataOptions = {
-  ...marketDataOptions,
-  ...props.options,
-}
-
 const { container, tradingview } = useInitWidget(
-  mergedOptions,
+  marketDataOptions as MarketDataOptions,
+  props.options as MarketDataOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js'
 );

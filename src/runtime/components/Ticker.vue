@@ -3,32 +3,30 @@
     :id="container"
     ref="tradingview"
     :style="{
-      width: options.autosize && '100%',
-      height: options.autosize && '100%',
+      width: options?.autosize ? '100%' : '',
+      height: options?.autosize ? '100%' : '',
     }" />
 </template>
 
 <script lang="ts" setup>
-import { tickerOptions } from '../composables/defaultWidgetOptions';
+import { tickerOptions } from '../data/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
 
-type TickerOptions = typeof tickerOptions
+type TickerOptions = typeof tickerOptions & {
+  [key: string]: unknown;
+};
 
 const props = withDefaults(defineProps<{
-  options?: Partial<TickerOptions> & { [key: string]: unknown }
+  options?: Partial<TickerOptions>
   class?: string
 }>(), {
   class: 'ticker',
-  options: () => ({})
+  options: undefined
 })
 
-const mergedOptions: TickerOptions = {
-  ...tickerOptions,
-  ...props.options,
-}
-
 const { container, tradingview } = useInitWidget(
-  mergedOptions,
+  tickerOptions as TickerOptions,
+  props.options as TickerOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-tickers.js'
 );

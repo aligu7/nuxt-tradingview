@@ -3,32 +3,30 @@
     :id="container"
     ref="tradingview"
     :style="{
-      width: options.autosize && '100%',
-      height: options.autosize && '100%',
+      width: options?.autosize ? '100%' : '',
+      height: options?.autosize ? '100%' : '',
     }" />
 </template>
 
 <script lang="ts" setup>
-import { chartOptions } from '../composables/defaultWidgetOptions';
+import { chartOptions } from '../data/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
 
-type ChartOptions = typeof chartOptions
+type ChartOptions = typeof chartOptions & {
+  [key: string]: unknown;
+};
 
 const props = withDefaults(defineProps<{
-  options?: Partial<ChartOptions> & { [key: string]: unknown }
+  options?: Partial<ChartOptions>
   class?: string
 }>(), {
   class: 'chart',
-  options: () => ({})
+  options: undefined
 })
 
-const mergedOptions: ChartOptions = {
-  ...chartOptions,
-  ...props.options,
-}
-
 const { container, tradingview } = useInitWidget(
-  mergedOptions,
+  chartOptions as ChartOptions,
+  props.options as ChartOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js'
 );

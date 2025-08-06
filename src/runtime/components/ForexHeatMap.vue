@@ -3,32 +3,30 @@
     :id="container"
     ref="tradingview"
     :style="{
-      width: options.autosize && '100%',
-      height: options.autosize && '100%',
+      width: options?.autosize ? '100%' : '',
+      height: options?.autosize ? '100%' : '',
     }" />
 </template>
 
 <script lang="ts" setup>
-import { forexHeatMapOptions } from '../composables/defaultWidgetOptions';
+import { forexHeatMapOptions } from '../data/defaultWidgetOptions';
 import useInitWidget from '../composables/useInitWidget';
 
-type ForexHeatMapOptions = typeof forexHeatMapOptions
+type ForexHeatMapOptions = typeof forexHeatMapOptions & {
+  [key: string]: unknown;
+};
 
 const props = withDefaults(defineProps<{
-  options?: Partial<ForexHeatMapOptions> & { [key: string]: unknown }
+  options?: Partial<ForexHeatMapOptions>
   class?: string
 }>(), {
   class: 'forex-heat-map',
-  options: () => ({})
+  options: undefined
 })
 
-const mergedOptions: ForexHeatMapOptions = {
-  ...forexHeatMapOptions,
-  ...props.options,
-}
-
 const { container, tradingview } = useInitWidget(
-  mergedOptions,
+  forexHeatMapOptions as ForexHeatMapOptions,
+  props.options as ForexHeatMapOptions,
   props.class,
   'https://s3.tradingview.com/external-embedding/embed-widget-forex-heat-map.js'
 );
