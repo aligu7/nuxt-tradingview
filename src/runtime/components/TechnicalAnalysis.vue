@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type TechnicalAnalysisOptions = typeof technicalAnalysisOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<TechnicalAnalysisOptions>
+  options?: Partial<TechnicalAnalysisOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'technical-analysis',

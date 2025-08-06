@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type TopStoriesOptions = typeof topStoriesOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<TopStoriesOptions>
+  options?: Partial<TopStoriesOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'ticker',

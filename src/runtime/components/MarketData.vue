@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type MarketDataOptions = typeof marketDataOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<MarketDataOptions>
+  options?: Partial<MarketDataOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'market-data',

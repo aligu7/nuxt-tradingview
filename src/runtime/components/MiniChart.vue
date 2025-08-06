@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type MiniChartOptions = typeof miniChartOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<MiniChartOptions>
+  options?: Partial<MiniChartOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'mini-chart',

@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type FundamentalData = typeof fundamentalDataOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<FundamentalData>
+  options?: Partial<FundamentalData> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'fundamental-data',

@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type ScreenerOptions = typeof screenerOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<ScreenerOptions>
+  options?: Partial<ScreenerOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'screener',

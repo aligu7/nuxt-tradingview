@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type ForexHeatMapOptions = typeof forexHeatMapOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<ForexHeatMapOptions>
+  options?: Partial<ForexHeatMapOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'forex-heat-map',

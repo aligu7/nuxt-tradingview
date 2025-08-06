@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type TickerTapeOptions = typeof tickerTapeOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<TickerTapeOptions>
+  options?: Partial<TickerTapeOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'ticker',

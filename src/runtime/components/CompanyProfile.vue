@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type CompanyProfileOptions = typeof companyProfileOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<CompanyProfileOptions>
+  options?: Partial<CompanyProfileOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'company-profile',

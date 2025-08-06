@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type StockHeatMap = typeof stockHeatMapOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<StockHeatMap>
+  options?: Partial<StockHeatMap> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'stock-heat-map',

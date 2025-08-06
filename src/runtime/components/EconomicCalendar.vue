@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type EconomicCalendarOptions = typeof economicCalendarOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<EconomicCalendarOptions>
+  options?: Partial<EconomicCalendarOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'economic-calendar',

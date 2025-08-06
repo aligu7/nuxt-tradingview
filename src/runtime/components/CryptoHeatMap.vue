@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type CryptoHeatMapOptions = typeof cryptoHeatMapOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<CryptoHeatMapOptions>
+  options?: Partial<CryptoHeatMapOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'crypto-heat-map',

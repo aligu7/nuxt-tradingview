@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type SingleTickerOptions = typeof singleTickerOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<SingleTickerOptions>
+  options?: Partial<SingleTickerOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'single-ticker',

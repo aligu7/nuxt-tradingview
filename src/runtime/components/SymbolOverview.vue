@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type SymbolOverviewOptions = typeof symbolOverviewOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<SymbolOverviewOptions>
+  options?: Partial<SymbolOverviewOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'symbol-overview',

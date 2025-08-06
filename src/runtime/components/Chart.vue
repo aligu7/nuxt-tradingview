@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type ChartOptions = typeof chartOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<ChartOptions>
+  options?: Partial<ChartOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'chart',

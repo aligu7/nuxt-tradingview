@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type TickerOptions = typeof tickerOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<TickerOptions>
+  options?: Partial<TickerOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'ticker',

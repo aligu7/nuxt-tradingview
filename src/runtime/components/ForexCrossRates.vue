@@ -15,7 +15,7 @@ import useInitWidget from '../composables/useInitWidget';
 type ForexCrossRatesOptions = typeof forexCrossRatesOptions
 
 const props = withDefaults(defineProps<{
-  options?: Partial<ForexCrossRatesOptions>
+  options?: Partial<ForexCrossRatesOptions> & { [key: string]: unknown }
   class?: string
 }>(), {
   class: 'forex-cross-rates',
